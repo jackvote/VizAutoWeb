@@ -20,8 +20,10 @@ $witness="jackvote";
 $wif='5Qwerty...';
 $keyon="VIZ5Cs3hmjaHF5Mm744D9Ed56ikcNovYHAH4wBM15K9xuDphuxZAA";
 
+$mail="info@expertgr.com"; // отправка сообщений о событиях на указанный емайл
 $url="https://control.viz.world";
 $reason="AutoDisableWeb";
+
 $timewait=$timewaitdef; // устанавливаем дефолтное значение или прописываем свой таймаут
 
 if  ( $only=="ALL" || $only==$witness ) { 
@@ -32,7 +34,7 @@ if  ( $only=="ALL" || $only==$witness ) {
     if (file_exists($witness.".disable")==true) { // пока есть флаг ручного отключения - игнорируем проверку (и включение)
         echo "<br>Manual disable - remove flag to enable<br>\n";
     } else {
-        checkWitness($witness, $wif, $keyon, $url, $reason, $timewait, $prefix); // проверка на пропущенные блоки и [де]активация
+        checkWitness($witness, $wif, $keyon, $url, $reason, $timewait, $prefix, $mail); // проверка на пропущенные блоки и [де]активация
     }
 }
 //=================  witness setting end  =================
@@ -42,6 +44,7 @@ $witness="retroscope";
 $wif='5Asdfgh...';
 $keyon="VIZ5m14X9UrUkZUM67A546ak6CezBKce3TbYrMJQFXqGKDSmQNN9B";
 
+$mail=""; // пустой, если не требуется отправка сообщений
 $url="https://control.viz.world";
 $reason="AutoDisableWeb";
 
@@ -55,7 +58,7 @@ if  ( $only=="ALL" || $only==$witness ) {
     if (file_exists($witness.".disable")==true) { // пока есть флаг ручного отключения - игнорируем проверку (и включение)
         echo "<br>Manual disable - remove flag to enable<br>\n";
     } else {
-        checkWitness($witness, $wif, $keyon, $url, $reason, $timewait, $prefix); // проверка на пропущенные блоки и [де]активация
+        checkWitness($witness, $wif, $keyon, $url, $reason, $timewait, $prefix, $mail); // проверка на пропущенные блоки и [де]активация
     }
 }
 //=================  witness setting end  =================
