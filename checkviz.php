@@ -24,14 +24,16 @@ $url="https://control.viz.world";
 $reason="AutoDisableWeb";
 $timewait=$timewaitdef; // устанавливаем дефолтное значение или прописываем свой таймаут
 
-if  ( isset($_GET['m']) && ($only=="ALL" || $only==$witness) ) { // ручное отключение ?m=off / включение ?m=on
-    updateManual($wif, $witness, $url, $keyon, $apinode, $_GET['m']);
-}
+if  ( $only=="ALL" || $only==$witness ) { 
+    if  ( isset($_GET['m']) ) { // ручное отключение ?m=off / включение ?m=on
+        updateManual($wif, $witness, $url, $keyon, $apinode, $_GET['m']);
+    }
 
-if (file_exists($witness.".disable")==true) { // пока есть флаг ручного отключения - игнорируем проверку (и включение)
-    echo "<br>Manual disable - remove flag to enable<br>\n";
-} else {
-    checkWitness($witness, $wif, $keyon, $url, $reason, $timewait, $prefix); // проверка на пропущенные блоки и [де]активация
+    if (file_exists($witness.".disable")==true) { // пока есть флаг ручного отключения - игнорируем проверку (и включение)
+        echo "<br>Manual disable - remove flag to enable<br>\n";
+    } else {
+        checkWitness($witness, $wif, $keyon, $url, $reason, $timewait, $prefix); // проверка на пропущенные блоки и [де]активация
+    }
 }
 //=================  witness setting end  =================
 
@@ -45,14 +47,16 @@ $reason="AutoDisableWeb";
 
 $timewait=$timewaitdef; // устанавливаем дефолтное значение или прописываем свой таймаут
 
-if  ( isset($_GET['m']) && ($only=="ALL" || $only==$witness) ) { // ручное отключение ?m=off / включение ?m=on
-    updateManual($wif, $witness, $url, $keyon, $apinode, $_GET['m']);
-}
+if  ( $only=="ALL" || $only==$witness ) { 
+    if  ( isset($_GET['m']) ) { // ручное отключение ?m=off / включение ?m=on
+        updateManual($wif, $witness, $url, $keyon, $apinode, $_GET['m']);
+    }
 
-if (file_exists($witness.".disable")==true) { // пока есть флаг ручного отключения - игнорируем проверку (и включение)
-    echo "<br>Manual disable - remove flag to enable<br>\n";
-} else {
-    checkWitness($witness, $wif, $keyon, $url, $reason, $timewait, $prefix); // проверка на пропущенные блоки и [де]активация
+    if (file_exists($witness.".disable")==true) { // пока есть флаг ручного отключения - игнорируем проверку (и включение)
+        echo "<br>Manual disable - remove flag to enable<br>\n";
+    } else {
+        checkWitness($witness, $wif, $keyon, $url, $reason, $timewait, $prefix); // проверка на пропущенные блоки и [де]активация
+    }
 }
 //=================  witness setting end  =================
 
