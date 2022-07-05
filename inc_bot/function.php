@@ -38,7 +38,8 @@ function checkWitness($witness, $wif, $keyon, $url, $reason, $timewait, $prefix)
 //            file_put_contents($file, "S|".$log, FILE_APPEND | LOCK_EX); // пишем лог
         }
     }
-}
+} // checkWitness
+
 function getWitness($whois, $apinode) {
     $api=new VIZ\JsonRPC($apinode);
     $account=$api->execute_method('get_witness_by_account',[$whois]);
@@ -76,5 +77,12 @@ function updateManual($wif, $whois, $url, $keyon, $apinode, $manual) {
 
 } // updateManual
 
+function sendMail($to, $subject, $message) {
+    $headers = 'From: checkwitness@' . $_SERVER[HTTP_HOST] . "\r\n" .
+    'Reply-To: devnull@' . $_SERVER[HTTP_HOST] . "\r\n" .
+    'X-Mailer: PHP/' . phpversion();
+     
+    mail($to, $subject, $message, $headers);
+}
 
 ?>
