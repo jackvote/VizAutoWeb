@@ -1,24 +1,27 @@
 <?php
 
-function checkWitness($witness, $wif, $keyon, $url, $reason, $timewait, $prefix) {
+function checkWitness($witness, $wif, $keyon, $url, $reason, $timewait, $prefix, $mail) {
     //file_put_contents("log/log.txt", date("d-m-Y H:i:s", time())."|".$prefix.$witness."\n", FILE_APPEND | LOCK_EX);
     global $apinode;
     $keyoff=$prefix."1111111111111111111111111111111114T1Anm";
 
     $line=file_get_contents("acc/".$witness."_".strtolower($prefix).".last"); // GET
-    list($timeold, $count)=explode("|", $line);
+    list($timeold, $count)=explode("|", $line); // извлекаем последнее число пропущенных блоков
 
     $obj=getWitness($witness, $apinode);
 
     $log=date("d-m-Y H:i:s", time())."|".$obj['total_missed']."|".$witness."|".$obj['last_confirmed_block_num']."\n";
     $file="log/".$witness.".".strtolower($prefix);
 
-    if ($obj['total_missed']>$count) {
+    if ($obj['total_missed']>$count) { // если количество пропущенных блоков увеличилось с момента последней проверки
         file_put_contents("acc/".$witness."_".strtolower($prefix).".last", time()."|".$obj['total_missed']); // записывем пропущенные блоки
         if ($obj['signing_key']<>$keyoff) {
             $result=updateWitness($wif, $witness, $reason, $keyoff, $apinode); // disable
             file_put_contents($file, "D|".$log, FILE_APPEND | LOCK_EX); // пишем лог
             echo "<br>Disable";
+            if ($mail<>"") { // если не пустой емайл - отправляем сообщение
+                sendMail($mail, "Отключение ноды", "Пропущено блоков: ".($obj['total_missed']-$count)."\n".$log );
+            }
         } else {
             file_put_contents($file, "N|".$log, FILE_APPEND | LOCK_EX); // пишем лог
             echo "<br>Now disabled<br>";
@@ -29,9 +32,12 @@ function checkWitness($witness, $wif, $keyon, $url, $reason, $timewait, $prefix)
                 $result=updateWitness($wif, $witness, $url, $keyon, $apinode); // enable
                 file_put_contents($file, "E|".$log, FILE_APPEND | LOCK_EX); // пишем лог
                 echo "Enable<br>";
+                if ($mail<>"") { // если не пустой емайл - отправляем сообщение
+                    sendMail($mail, "Включение ноды", "Всего пропущено: ".$obj['total_missed']."\n".$log );
+                }
             } else {                                                        // wait
-            file_put_contents($file, "W|".$log, FILE_APPEND | LOCK_EX); // пишем лог
-            echo "<br>Wait<br>";
+                file_put_contents($file, "W|".$log, FILE_APPEND | LOCK_EX); // пишем лог
+                echo "<br>Wait<br>";
             }
         } else {
             echo "<br>All right ".$witness."<br>";                                           // no problem
